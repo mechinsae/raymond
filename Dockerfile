@@ -1,9 +1,6 @@
-FROM php:7.2-apache
+FROM composer:1.7.2
 
-MAINTAINER datastory Hub <hylee@dshub.cloud>
+RUN git clone https://github.com/aquasecurity/trivy-ci-test.git && cd trivy-ci-test && rm Cargo.lock && rm Pipfile.lock
 
-ADD index.php2 /var/www/html/index.php
-
-EXPOSE 80
-
-CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
+CMD apk add --no-cache mysql-client
+ENTRYPOINT ["mysql"]
