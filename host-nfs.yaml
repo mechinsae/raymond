@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: weblog-pod2
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: k8s-node2
+  containers:
+  - image: nginx:1.21
+    name: nginx-web
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: host-path
+      mountPath: /var/log/nginx
+  volumes:
+  - name: host-path
+    hostPath:
+      path: /data_dir/web-log #/var/log/nginx,/data_dir/web-log mount
+      type: DirectoryOrCreate #DirectoryOrCreate가 아닌 Directory 를 사용하면 해당 디렉토리 사전 생성 필요
