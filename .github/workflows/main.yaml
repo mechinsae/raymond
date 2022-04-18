@@ -21,7 +21,7 @@ jobs:
 
       - name: Aqua Credentials
         run: |
-          wget --user ${{ secrets.AQUA_EMAIL }} --password ${{ secrets.AQUA_PASS }} https://download.aquasec.com/scanner/6.5.0/scannercli
+          wget --user raymond@amonsoft.co.kr --password Aquasecurity1! https://download.aquasec.com/scanner/6.5.0/scannercli
       - name: Aqua Scanner
         run: |
           chmod +x scannercli
