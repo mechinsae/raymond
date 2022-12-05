@@ -6,7 +6,7 @@ on:
   pull_request:
   workflow_dispatch:
 env:
-  IMAGE: "nginx:perl"
+  IMAGE: "mechinsae/fileless_malware_loader:DTA"
   REGISTRY: "Docker Hub"
   BUILD_JOB_NAME: "Github-Action-Sample"
   BUILD_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/
