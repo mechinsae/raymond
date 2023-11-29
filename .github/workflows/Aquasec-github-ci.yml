@@ -1,0 +1,35 @@
+name: Aquasec Image Scan
+
+on: [push, pull_request]
+
+env:
+  IMAGE_NAME: ${{ github.repository }}:${{ github.sha }}
+
+jobs:
+  # Jobs are ran independently from each other, so build and scan needs to be in a single job.
+  build-and-scan:
+    name: Build and scan image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+        # Defaults are sufficient generally
+        # https://github.com/actions/checkout#usage
+
+      - name: Aqua Credentials
+        run: |
+          wget --user ${{ secrets.AQUA_EMAIL }} --password ${{ secrets.AQUA_PASS }} https://download.aquasec.com/scanner/2022.4/scannercli
+          chmod +x scannercli
+
+      - name: Build the image
+        run: |
+          cat <<EOF | tee /home/runner/work/raymond/raymond/Dockerfile
+          FROM nginx:1.21
+          EXPOSE 80
+          CMD ["nginx", "-g", "daemon off;"]
+          EOF
+          docker build -t $IMAGE_NAME .
+
+      - name: Scan the image
+        run: ./scannercli scan -U ${{ secrets.AQUA_SERVER_USER }} -A ${{ secrets.AQUA_TOKEN }} -H ${{ secrets.AQUA_SERVER }} ${{ env.IMAGE }} --local $IMAGE_NAME --no-verify --show-negligible --htmlfile out.html
